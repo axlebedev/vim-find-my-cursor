@@ -9,62 +9,62 @@ let s:timer_id = 0
 
 " Like windo but restore the current window.
 function! WinDo(command)
-  let currwin=winnr()
-  execute 'windo ' . a:command
-  execute currwin . 'wincmd w'
+    let currwin=winnr()
+    execute 'windo ' . a:command
+    execute currwin . 'wincmd w'
 endfunction
 com! -nargs=+ -complete=command Windo call WinDo(<q-args>)
 
 function! s:ReturnHighlightTerm(group, term) abort
-   " Store output of group to variable
-   let output = execute('hi ' . a:group)
+    " Store output of group to variable
+    let output = execute('hi ' . a:group)
 
-   " Find the term we're looking for
-   return matchstr(output, a:term.'=\zs\S*')
+    " Find the term we're looking for
+    return matchstr(output, a:term.'=\zs\S*')
 endfunction
 
 function! s:SaveSettings() abort
-  let s:isActivated = 1
-  let s:cursorline = &cursorline
-  let s:cursorcolumn = &cursorcolumn
-  let s:cursorlineBg = s:ReturnHighlightTerm('CursorLine', 'guibg')
-  let s:cursorcolumnBg = s:ReturnHighlightTerm('CursorColumn', 'guibg')
+    let s:isActivated = 1
+    let s:cursorline = &cursorline
+    let s:cursorcolumn = &cursorcolumn
+    let s:cursorlineBg = s:ReturnHighlightTerm('CursorLine', 'guibg')
+    let s:cursorcolumnBg = s:ReturnHighlightTerm('CursorColumn', 'guibg')
 endfunction
 
 function! s:RestoreSettings(...) abort
-  call timer_stop(s:timer_id)
-  let s:timer_id = 0
-  if (s:isActivated)
-    let s:isActivated = 0
-    Windo let &cursorline = s:cursorline
-    Windo let &cursorcolumn = s:cursorcolumn
-    execute 'highlight CursorLine guibg='.s:cursorlineBg
-    execute 'highlight CursorColumn guibg='.s:cursorcolumnBg
-    IlluminationEnable
-    autocmd! findcursor
-  endif
+    call timer_stop(s:timer_id)
+    let s:timer_id = 0
+    if (s:isActivated)
+        let s:isActivated = 0
+        Windo let &cursorline = s:cursorline
+        Windo let &cursorcolumn = s:cursorcolumn
+        execute 'highlight CursorLine guibg='.s:cursorlineBg
+        execute 'highlight CursorColumn guibg='.s:cursorcolumnBg
+        IlluminationEnable
+        autocmd! findcursor
+    endif
 endfunction
 
 function! findcursor#FindCursor(color, autoClear) abort
-  if (s:timer_id == 0)
-    call <sid>SaveSettings()
-  endif
+    if (s:timer_id == 0)
+        call <sid>SaveSettings()
+    endif
 
-  IlluminationDisable
+    IlluminationDisable
 
-  setlocal cursorline
-  setlocal cursorcolumn
-  if (a:color[0] == '#')
-    execute 'highlight CursorLine guibg='.a:color
-    execute 'highlight CursorColumn guibg='.a:color
-  endif
+    setlocal cursorline
+    setlocal cursorcolumn
+    if (a:color[0] == '#')
+        execute 'highlight CursorLine guibg='.a:color
+        execute 'highlight CursorColumn guibg='.a:color
+    endif
 
-  augroup findcursor
-    autocmd!
-    autocmd CursorMoved,CursorMovedI * call <sid>RestoreSettings()
-  augroup END
+    augroup findcursor
+        autocmd!
+        autocmd CursorMoved,CursorMovedI * call <sid>RestoreSettings()
+    augroup END
 
-  if (a:autoClear)
-    let s:timer_id = timer_start(500, {id -> <sid>RestoreSettings()})
-  endif
+    if (a:autoClear)
+        let s:timer_id = timer_start(500, {id -> <sid>RestoreSettings()})
+    endif
 endfunction
