@@ -1,4 +1,5 @@
-" make single-line code to blocked
+let s:FindCursorPre = get(g:, 'FindCursorPre', { -> 0 })
+let s:FindCursorPost = get(g:, 'FindCursorPost', { -> 0 })
 
 let s:cursorline = 0
 let s:cursorcolumn = 0
@@ -24,6 +25,7 @@ function! s:ReturnHighlightTerm(group, term) abort
 endfunction
 
 function! s:SaveSettings() abort
+    call s:FindCursorPre()
     let s:isActivated = 1
     let s:cursorline = &cursorline
     let s:cursorcolumn = &cursorcolumn
@@ -40,8 +42,8 @@ function! s:RestoreSettings(...) abort
         Windo let &cursorcolumn = s:cursorcolumn
         execute 'highlight CursorLine guibg='.s:cursorlineBg
         execute 'highlight CursorColumn guibg='.s:cursorcolumnBg
-        IlluminationEnable
         autocmd! findcursor
+        call s:FindCursorPost()
     endif
 endfunction
 
@@ -49,8 +51,6 @@ function! findcursor#FindCursor(color, autoClear) abort
     if (s:timer_id == 0)
         call <sid>SaveSettings()
     endif
-
-    IlluminationDisable
 
     setlocal cursorline
     setlocal cursorcolumn
