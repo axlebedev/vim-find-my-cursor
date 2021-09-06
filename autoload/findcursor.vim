@@ -42,7 +42,9 @@ function! s:RestoreSettings(...) abort
         Windo let &cursorcolumn = s:cursorcolumn
         execute 'highlight CursorLine guibg='.s:cursorlineBg
         execute 'highlight CursorColumn guibg='.s:cursorcolumnBg
-        autocmd! findcursor
+        augroup findcursor
+            autocmd!
+        augroup END
         call s:FindCursorPost()
     endif
 endfunction
