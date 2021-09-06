@@ -49,7 +49,7 @@ endfunction
 
 function! findcursor#FindCursor(color, autoClear) abort
     if (s:timer_id == 0)
-        call <sid>SaveSettings()
+        call s:SaveSettings()
     endif
 
     setlocal cursorline
@@ -61,10 +61,10 @@ function! findcursor#FindCursor(color, autoClear) abort
 
     augroup findcursor
         autocmd!
-        autocmd CursorMoved,CursorMovedI * call <sid>RestoreSettings()
+        autocmd CursorMoved,CursorMovedI * call s:RestoreSettings()
     augroup END
 
     if (a:autoClear)
-        let s:timer_id = timer_start(500, {id -> <sid>RestoreSettings()})
+        let s:timer_id = timer_start(500, {id -> s:RestoreSettings()})
     endif
 endfunction
