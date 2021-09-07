@@ -1,1 +1,1 @@
-command! -bar FindCursor call findcursor#FindCursor(0, 1)
+command! -bar -nargs=+ FindCursor call findcursor#FindCursor(<f-args>)
