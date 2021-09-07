@@ -7,7 +7,7 @@ let s:savedCursorcolumnBg = ''
 let s:isActivated = 0
 let s:timer_id = 0
 
-" Like windo but restore the current window.
+" Like windo but restore focus to current window after work.
 function! WinDo(command)
     let currwin=winnr()
     execute 'windo ' . a:command
