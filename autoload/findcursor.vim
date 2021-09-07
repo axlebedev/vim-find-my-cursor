@@ -53,7 +53,7 @@ function! s:RestoreSettings(...) abort
     endif
 endfunction
 
-function! findcursor#FindCursor(color, autoClear) abort
+function! findcursor#FindCursor(color, autoClearTimeoutMs) abort
     if (!s:isActivated)
         call s:SaveSettings()
     endif
@@ -70,7 +70,7 @@ function! findcursor#FindCursor(color, autoClear) abort
         autocmd CursorMoved,CursorMovedI * call s:RestoreSettings()
     augroup END
 
-    if (a:autoClear)
-        let s:timer_id = timer_start(500, {id -> s:RestoreSettings()})
+    if (a:autoClearTimeoutMs > 0)
+        let s:timer_id = timer_start(a:autoClearTimeoutMs, {id -> s:RestoreSettings()})
     endif
 endfunction
