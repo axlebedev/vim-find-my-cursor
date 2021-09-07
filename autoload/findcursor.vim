@@ -54,7 +54,7 @@ function! s:RestoreSettings(...) abort
 endfunction
 
 function! findcursor#FindCursor(color, autoClear) abort
-    if (s:timer_id == 0)
+    if (!s:isActivated)
         call s:SaveSettings()
     endif
 
