@@ -1,10 +1,9 @@
 let s:FindCursorPre = get(g:, 'FindCursorPre', { -> 0 })
 let s:FindCursorPost = get(g:, 'FindCursorPost', { -> 0 })
 
-let s:cursorline = 0
-let s:cursorcolumn = 0
-let s:cursorlineBg = ''
-let s:cursorcolumnBg = ''
+let s:savedSettingsByWinnr = {}
+let s:savedCursorlineBg = ''
+let s:savedCursorcolumnBg = ''
 let s:isActivated = 0
 let s:timer_id = 0
 
@@ -29,8 +28,10 @@ function! s:SaveSettings() abort
     let s:isActivated = 1
     let s:cursorline = &cursorline
     let s:cursorcolumn = &cursorcolumn
-    let s:cursorlineBg = s:ReturnHighlightTerm('CursorLine', 'guibg')
-    let s:cursorcolumnBg = s:ReturnHighlightTerm('CursorColumn', 'guibg')
+
+    Windo let s:savedSettingsByWinnr[winnr()] = { 'cursorline': &cursorline, 'cursorcolumn': &cursorcolumn }
+    let s:savedCursorlineBg = s:ReturnHighlightTerm('CursorLine', 'guibg')
+    let s:savedCursorcolumnBg = s:ReturnHighlightTerm('CursorColumn', 'guibg')
 
     Windo let &cursorline = 0
     Windo let &cursorcolumn = 0
@@ -41,10 +42,10 @@ function! s:RestoreSettings(...) abort
     let s:timer_id = 0
     if (s:isActivated)
         let s:isActivated = 0
-        Windo let &cursorline = s:cursorline
-        Windo let &cursorcolumn = s:cursorcolumn
-        execute 'highlight CursorLine guibg='.s:cursorlineBg
-        execute 'highlight CursorColumn guibg='.s:cursorcolumnBg
+        Windo let &cursorline = s:savedSettingsByWinnr[winnr()].cursorline
+        Windo let &cursorcolumn = s:savedSettingsByWinnr[winnr()].cursorcolumn
+        execute 'highlight CursorLine guibg='.s:savedCursorlineBg
+        execute 'highlight CursorColumn guibg='.s:savedCursorcolumnBg
         augroup findcursor
             autocmd!
         augroup END
