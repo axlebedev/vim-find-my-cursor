@@ -31,6 +31,9 @@ function! s:SaveSettings() abort
     let s:cursorcolumn = &cursorcolumn
     let s:cursorlineBg = s:ReturnHighlightTerm('CursorLine', 'guibg')
     let s:cursorcolumnBg = s:ReturnHighlightTerm('CursorColumn', 'guibg')
+
+    Windo let &cursorline = 0
+    Windo let &cursorcolumn = 0
 endfunction
 
 function! s:RestoreSettings(...) abort
