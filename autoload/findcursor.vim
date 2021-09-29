@@ -55,10 +55,10 @@ endfunction
 function! findcursor#FindCursor(color, autoClearTimeoutMs) abort
     if (!s:isActivated)
         call s:SaveSettings()
+        setlocal cursorline
+        setlocal cursorcolumn
     endif
 
-    setlocal cursorline
-    setlocal cursorcolumn
     if (a:color[0] == '#')
         execute 'highlight CursorLine guibg='.a:color
         execute 'highlight CursorColumn guibg='.a:color
