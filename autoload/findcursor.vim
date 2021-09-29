@@ -42,6 +42,7 @@ function! s:RestoreSettings(...) abort
         let s:isActivated = 0
         Windo let &cursorline = s:savedSettingsByWinnr[winnr()].cursorline
         Windo let &cursorcolumn = s:savedSettingsByWinnr[winnr()].cursorcolumn
+        Windo unlet s:savedSettingsByWinnr[winnr()]
         execute 'highlight CursorLine guibg='.s:savedCursorlineBg
         execute 'highlight CursorColumn guibg='.s:savedCursorcolumnBg
         augroup findcursor
