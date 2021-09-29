@@ -26,8 +26,6 @@ endfunction
 function! s:SaveSettings() abort
     call s:FindCursorPre()
     let s:isActivated = 1
-    let s:cursorline = &cursorline
-    let s:cursorcolumn = &cursorcolumn
 
     Windo let s:savedSettingsByWinnr[winnr()] = { 'cursorline': &cursorline, 'cursorcolumn': &cursorcolumn }
     let s:savedCursorlineBg = s:ReturnHighlightTerm('CursorLine', 'guibg')
