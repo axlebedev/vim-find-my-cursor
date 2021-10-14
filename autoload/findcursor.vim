@@ -39,17 +39,17 @@ function! s:SaveSettings() abort
 endfunction
 
 function! s:RestoreSettings(...) abort
-    call writefile(split('RestoreSettings windows='.string(keys(s:savedSettingsByWinnr)), "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
+    call writefile(split('RestoreSettings s:isActivated='.s:isActivated.' windows='.string(keys(s:savedSettingsByWinnr)).' winnr($)='.winnr('$'), "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     " echom 's:RestoreSettings(...)'
     call timer_stop(s:timer_id)
     let s:timer_id = 0
     if (s:isActivated)
         let s:isActivated = 0
+        execute 'highlight CursorLine guibg='.s:savedCursorlineBg
+        execute 'highlight CursorColumn guibg='.s:savedCursorcolumnBg
         Windo let &cursorline = s:savedSettingsByWinnr[winnr()].cursorline
         Windo let &cursorcolumn = s:savedSettingsByWinnr[winnr()].cursorcolumn
         Windo unlet s:savedSettingsByWinnr[winnr()]
-        execute 'highlight CursorLine guibg='.s:savedCursorlineBg
-        execute 'highlight CursorColumn guibg='.s:savedCursorcolumnBg
         augroup findcursor
             autocmd!
         augroup END
