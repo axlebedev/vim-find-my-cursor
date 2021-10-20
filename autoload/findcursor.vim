@@ -74,7 +74,7 @@ function! findcursor#FindCursor(color, autoClearTimeoutMs) abort
 
     augroup findcursor
         autocmd!
-        autocmd CursorMoved,CursorMovedI,BufLeave * call s:RestoreSettings()
+        autocmd CursorMoved,CursorMovedI,BufLeave,CmdlineEnter * call s:RestoreSettings()
     augroup END
 
     if (a:autoClearTimeoutMs > 0)
