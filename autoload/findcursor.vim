@@ -1,7 +1,6 @@
 let s:FindCursorPre = get(g:, 'FindCursorPre', { -> 0 })
 let s:FindCursorPost = get(g:, 'FindCursorPost', { -> 0 })
 
-let s:savedSettingsByWinnr = {}
 let s:savedCursorlineBg = ''
 let s:savedCursorcolumnBg = ''
 let s:isActivated = 0
@@ -27,10 +26,7 @@ function! s:SaveSettings() abort
     call s:FindCursorPre()
     let s:isActivated = 1
 
-    let s:savedWindows = []
-    Windo let s:savedSettingsByWinnr[winnr()] = { 'cursorline': &cursorline, 'cursorcolumn': &cursorcolumn }
-    Windo call add(s:savedWindows, winnr())
-    call writefile(split('SaveSettings windows='.string(s:savedWindows), "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
+    Windo let w:savedSettings = { 'cursorline': &cursorline, 'cursorcolumn': &cursorcolumn }
     let s:savedCursorlineBg = s:ReturnHighlightTerm('CursorLine', 'guibg')
     let s:savedCursorcolumnBg = s:ReturnHighlightTerm('CursorColumn', 'guibg')
 
@@ -39,7 +35,7 @@ function! s:SaveSettings() abort
 endfunction
 
 function! s:RestoreSettings(...) abort
-    call writefile(split('RestoreSettings s:isActivated='.s:isActivated.' windows='.string(keys(s:savedSettingsByWinnr)).' winnr($)='.winnr('$'), "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
+    call writefile(split('RestoreSettings s:isActivated='.s:isActivated.' windows=TODOMAYBE'.' winnr($)='.winnr('$'), "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     " echom 's:RestoreSettings(...)'
     call timer_stop(s:timer_id)
     let s:timer_id = 0
@@ -47,11 +43,8 @@ function! s:RestoreSettings(...) abort
         let s:isActivated = 0
         execute 'highlight CursorLine guibg='.s:savedCursorlineBg
         execute 'highlight CursorColumn guibg='.s:savedCursorcolumnBg
-        for win in s:savedSettingsByWinnr->keys()
-            call setwinvar(win, '&cursorline', s:savedSettingsByWinnr[win].cursorline)
-            call setwinvar(win, '&cursorcolumn', s:savedSettingsByWinnr[win].cursorcolumn)
-            unlet s:savedSettingsByWinnr[win]
-        endfor
+        Windo call setwinvar(winnr(), '&cursorline', w:savedSettings.cursorline)
+        Windo call setwinvar(winnr(), '&cursorcolumn', w:savedSettings.cursorcolumn)
         augroup findcursor
             autocmd!
         augroup END
@@ -62,7 +55,6 @@ endfunction
 function! findcursor#FindCursor(color, autoClearTimeoutMs) abort
     call writefile(split('FindCursor('.a:color.', '.a:autoClearTimeoutMs.')', "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     call writefile(split('s:isActivated='.s:isActivated, "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
-    " echom 'findcursor#FindCursor'
     if (!s:isActivated)
         call s:SaveSettings()
         setlocal cursorline
