@@ -72,8 +72,9 @@ function! s:RestoreSettings(...) abort
     augroup END
 endfunction
 
-function! findcursor#FindCursor(color, autoClearTimeoutMs) abort
-    call writefile(split('FindCursor('.a:color.', '.a:autoClearTimeoutMs.')', "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
+function! findcursor#FindCursor(color) abort
+    let autoClearTimeoutMs = get(a:, 2, 0)
+    call writefile(split('FindCursor('.a:color.', '.autoClearTimeoutMs.')', "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     call writefile(split('s:isActivated='.s:isActivated, "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     if (!s:isActivated)
         call s:SaveSettings()
@@ -91,7 +92,7 @@ function! findcursor#FindCursor(color, autoClearTimeoutMs) abort
         autocmd CursorMoved,CursorMovedI,BufLeave,CmdlineEnter * call s:RestoreSettings()
     augroup END
 
-    if (a:autoClearTimeoutMs > 0)
-        let s:timer_id = timer_start(a:autoClearTimeoutMs, {id -> s:RestoreSettings()})
+    if (autoClearTimeoutMs > 0)
+        let s:timer_id = timer_start(autoClearTimeoutMs, {id -> s:RestoreSettings()})
     endif
 endfunction
