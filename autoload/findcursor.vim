@@ -84,8 +84,10 @@ function! findcursor#FindCursor(...) abort
         setlocal cursorcolumn
     endif
 
-    execute 'highlight CursorLine guibg='.color
-    execute 'highlight CursorColumn guibg='.color
+    if (color[0] == '#')
+        execute 'highlight CursorLine guibg='.color
+        execute 'highlight CursorColumn guibg='.color
+    endif
 
     augroup findcursor
         autocmd!
