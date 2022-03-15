@@ -1,5 +1,6 @@
 let s:FindCursorPre = get(g:, 'FindCursorPre', { -> 0 })
 let s:FindCursorPost = get(g:, 'FindCursorPost', { -> 0 })
+let s:FindCursorDefaultColor = get(g:, 'FindCursorDefaultColor', '#FF00FF')
 
 let s:isActivated = 0
 let s:timer_id = 0
@@ -72,9 +73,10 @@ function! s:RestoreSettings(...) abort
     augroup END
 endfunction
 
-function! findcursor#FindCursor(color) abort
+function! findcursor#FindCursor(...) abort
+    let color = get(a:, 1, s:FindCursorDefaultColor)
     let autoClearTimeoutMs = get(a:, 2, 0)
-    call writefile(split('FindCursor('.a:color.', '.autoClearTimeoutMs.')', "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
+    call writefile(split('FindCursor('.color.', '.autoClearTimeoutMs.')', "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     call writefile(split('s:isActivated='.s:isActivated, "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     if (!s:isActivated)
         call s:SaveSettings()
@@ -82,10 +84,8 @@ function! findcursor#FindCursor(color) abort
         setlocal cursorcolumn
     endif
 
-    if (a:color[0] == '#')
-        execute 'highlight CursorLine guibg='.a:color
-        execute 'highlight CursorColumn guibg='.a:color
-    endif
+    execute 'highlight CursorLine guibg='.color
+    execute 'highlight CursorColumn guibg='.color
 
     augroup findcursor
         autocmd!
