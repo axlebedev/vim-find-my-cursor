@@ -1,6 +1,8 @@
 # Vim plugin: Find my cursor
 Highlight cursor position.
 
+![image](https://user-images.githubusercontent.com/3949614/158979422-eaf84035-9222-4bf6-8a10-e0c42a120e02.png)
+
 This plugin adds a function: highlight cursor position  
 Highlight will be cleared after timeout, or "CursorMoved" event
 
@@ -10,12 +12,12 @@ Highlight will be cleared after timeout, or "CursorMoved" event
 ```
 
 `<hexColor>` [required] -
-color in [hex format](https://www.w3schools.com/colors/colors_hexadecimal.asp)  
-`0` for using `CursorLine` and `CursorColumn` highlights
+color in [hex format](https://www.w3schools.com/colors/colors_hexadecimal.asp), or `0` - use `CursorLine` and `CursorColumn` highlights
 
 `<timeoutMs>` [optional, default = 0] - 
 after this timeout highlight will be hidden.  
 `0` - wait for "CursorMoved".  
+
 
 ### USAGE
 Several examples
@@ -51,9 +53,9 @@ noremap <silent> <plug>(slash-after) <CMD>execute("FindCursor #d6d8fa 0<bar>Show
 
 ### DEMO
 
-TODO: gif
+https://user-images.githubusercontent.com/3949614/158979017-19f3cf61-6b3e-4a23-a3b1-2b4a413e9cb4.mp4
 
----
+
 
 ### CONFIGURATION
 ##### `g:FindCursorPre`
@@ -69,15 +71,21 @@ let g:FindCursorPre = function('FindCursorHookPre')
 ##### `g:FindCursorPost`
 Opposite to `g:FindCursorPre`: a function to run after "FindCursor" is cleared.
 ``` Vim Script
-function! FindCursorHookPost() abort
-    FootprintsEnable
-    IlluminationEnablee
-endfunction
-let g:FindCursorPost = function('FindCursorHookPost')
+" Lambda function is OK too
+let g:FindCursorPost = {-> execute('FootprintsEnable | IlluminationEnable')}
 ```
 
 ---
 
-### CONTRIBUTIONS
+
+### NOTES
 If you find a bug, or have an improvement suggestion -
 please place an issue in this repository.
+
+---
+
+Check out vim plugins:  
+[**footprints**](https://github.com/axlebedev/footprints)  
+[**vim-gotoline-popup**](https://github.com/axlebedev/vim-gotoline-popup)  
+
+**<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★</p>**
