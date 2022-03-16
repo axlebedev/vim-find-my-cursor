@@ -52,7 +52,6 @@ function! s:RestoreWindowLocalSettings() abort
 endfunction
 
 function! s:RestoreSettings(...) abort
-    call writefile(split('RestoreSettings s:isActivated='.s:isActivated.' winnr($)='.winnr('$'), "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     call timer_stop(s:timer_id)
     let s:timer_id = 0
     if (s:isActivated)
@@ -76,8 +75,6 @@ endfunction
 function! findcursor#FindCursor(...) abort
     let color = get(a:, 1, s:FindCursorDefaultColor)
     let autoClearTimeoutMs = get(a:, 2, 0)
-    call writefile(split('FindCursor('.color.', '.autoClearTimeoutMs.')', "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
-    call writefile(split('s:isActivated='.s:isActivated, "\n", 1), glob('/home/alex/.vim/bundle/where-is-cursor/log.txt'), 'a')
     if (!s:isActivated)
         call s:SaveSettings()
         setlocal cursorline
