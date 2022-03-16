@@ -22,8 +22,10 @@ function! s:ReturnHighlightTerm(group, term) abort
 endfunction
 
 function! s:SaveWindowLocalSettings() abort
-    if (!exists("w:savedSettings"))
+    if (&buftype != 'popup' && !exists("w:savedSettings"))
         let w:savedSettings = { 'cursorline': &cursorline, 'cursorcolumn': &cursorcolumn }
+        let &cursorline = 0
+        let &cursorcolumn = 0
     endif
 endfunction
 
@@ -38,13 +40,10 @@ function! s:SaveSettings() abort
     if (!exists("s:savedCursorcolumnBg"))
         let s:savedCursorcolumnBg = s:ReturnHighlightTerm('CursorColumn', 'guibg')
     endif
-
-    Windo let &cursorline = 0
-    Windo let &cursorcolumn = 0
 endfunction
 
 function! s:RestoreWindowLocalSettings() abort
-    if (exists('w:savedSettings'))
+    if (&buftype != 'popup' && exists('w:savedSettings'))
         call setwinvar(winnr(), '&cursorline', w:savedSettings.cursorline)
         call setwinvar(winnr(), '&cursorcolumn', w:savedSettings.cursorcolumn)
         unlet w:savedSettings
