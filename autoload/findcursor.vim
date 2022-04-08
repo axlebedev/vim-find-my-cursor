@@ -87,7 +87,8 @@ function! findcursor#FindCursor(...) abort
 
     augroup findcursor
         autocmd!
-        autocmd CursorMoved,CursorMovedI,BufLeave,CmdlineEnter * call s:RestoreSettings()
+        " BufNew - shoots before 'WinDo not allowed in popup window' error 
+        autocmd BufNew,CursorMoved,CursorMovedI,BufLeave,CmdlineEnter,InsertEnter,InsertLeave * call s:RestoreSettings()
     augroup END
 
     if (autoClearTimeoutMs > 0)
