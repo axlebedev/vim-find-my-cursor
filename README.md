@@ -1,7 +1,7 @@
 # Vim plugin: Find my cursor
-Highlight cursor position.
+Highlight/unhighlight cursor position by any criteria.
 
-![image](https://user-images.githubusercontent.com/3949614/158979422-eaf84035-9222-4bf6-8a10-e0c42a120e02.png)
+<!-- ![image](https://user-images.githubusercontent.com/3949614/158979422-eaf84035-9222-4bf6-8a10-e0c42a120e02.png) -->
 
 This plugin adds a function: highlight cursor position  
 Highlight will be cleared after timeout, or "CursorMoved" event
