@@ -51,6 +51,7 @@ function! s:RestoreWindowLocalSettings() abort
 endfunction
 
 function! s:RestoreSettings(...) abort
+    let currentMode = mode('.')
     call timer_stop(s:timer_id)
     let s:timer_id = 0
     if (s:isActivated)
@@ -64,6 +65,10 @@ function! s:RestoreSettings(...) abort
             autocmd!
         augroup END
         call s:FindCursorPost()
+
+        if (index(['no', 'v', 'V', 'CTRL-V', 's', 'S', 'CTRL-S'], currentMode) > 0)
+            normal gv
+        endif
     endif
 
     augroup findcursor
