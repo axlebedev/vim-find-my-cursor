@@ -5,14 +5,6 @@ let s:FindCursorDefaultColor = get(g:, 'FindCursorDefaultColor', '#FF00FF')
 let s:isActivated = 0
 let s:timer_id = 0
 
-" Like windo but restore focus to current window after work.
-function! WinDo(command)
-    let currwin=winnr()
-    execute 'windo ' . a:command
-    execute currwin . 'wincmd w'
-endfunction
-com! -nargs=+ -complete=command Windo call WinDo(<q-args>)
-
 function! s:ReturnHighlightTerm(group, term) abort
     " Store output of group to variable
     let output = execute('hi ' . a:group)
@@ -22,18 +14,25 @@ function! s:ReturnHighlightTerm(group, term) abort
 endfunction
 
 function! s:SaveWindowLocalSettings() abort
-    if (&buftype != 'popup' && !exists("w:savedSettings"))
-        let w:savedSettings = { 'cursorline': &cursorline, 'cursorcolumn': &cursorcolumn }
-        let &cursorline = 0
-        let &cursorcolumn = 0
-    endif
+    for bufn in tabpagebuflist()
+    " this check was previously, but seems useless.
+    " TODO: if it remains useless until 01.03.2023 - remove it
+    " if (&buftype != 'popup' && !exists("w:savedSettings"))
+        let winn = bufwinnr(bufn)
+        call setwinvar(winn, 'savedSettings', {
+            \ 'cursorline': getwinvar(winn, '&cursorline'),
+            \ 'cursorcolumn': getwinvar(winn, '&cursorcolumn'),
+        \ })
+        call setwinvar(winn, '&cursorline', 0)
+        call setwinvar(winn, '&cursorcolumn', 0)
+    endfor
 endfunction
 
 function! s:SaveSettings() abort
     call s:FindCursorPre()
     let s:isActivated = 1
 
-    Windo call s:SaveWindowLocalSettings()
+    call s:SaveWindowLocalSettings()
     if (!exists("s:savedCursorlineBg"))
         let s:savedCursorlineBg = s:ReturnHighlightTerm('CursorLine', 'guibg')
     endif
@@ -43,11 +42,12 @@ function! s:SaveSettings() abort
 endfunction
 
 function! s:RestoreWindowLocalSettings() abort
-    if (&buftype != 'popup' && exists('w:savedSettings'))
-        call setwinvar(winnr(), '&cursorline', w:savedSettings.cursorline)
-        call setwinvar(winnr(), '&cursorcolumn', w:savedSettings.cursorcolumn)
-        unlet w:savedSettings
-    endif
+    for bufn in tabpagebuflist()
+        let winn = bufwinnr(bufn)
+        let savedSettings = getwinvar(winn, 'savedSettings')
+        call setwinvar(winn, '&cursorline', savedSettings.cursorline)
+        call setwinvar(winn, '&cursorcolumn', savedSettings.cursorcolumn)
+    endfor
 endfunction
 
 function! s:RestoreSettings(...) abort
@@ -60,7 +60,7 @@ function! s:RestoreSettings(...) abort
         execute 'highlight CursorColumn guibg='.s:savedCursorcolumnBg
         unlet s:savedCursorlineBg
         unlet s:savedCursorcolumnBg
-        Windo call s:RestoreWindowLocalSettings()
+        call s:RestoreWindowLocalSettings()
         augroup findcursor
             autocmd!
         augroup END
