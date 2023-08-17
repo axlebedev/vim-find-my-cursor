@@ -65,10 +65,6 @@ function! s:RestoreSettings(...) abort
             autocmd!
         augroup END
         call s:FindCursorPost()
-
-        if (index(['no', 'v', 'V', 'CTRL-V', 's', 'S', 'CTRL-S'], currentMode) > 0)
-            normal gv
-        endif
     endif
 
     augroup findcursor
