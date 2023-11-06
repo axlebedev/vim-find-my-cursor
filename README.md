@@ -84,8 +84,6 @@ please place an issue in this repository.
 
 ---
 
-Check out vim plugins:  
-[**footprints**](https://github.com/axlebedev/footprints)  
-[**vim-gotoline-popup**](https://github.com/axlebedev/vim-gotoline-popup)  
 
-**<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★</p>**
+Check out my Vim plugins:   
+https://github.com/axlebedev  
