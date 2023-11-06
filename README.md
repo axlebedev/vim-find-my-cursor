@@ -1,5 +1,6 @@
 # Vim plugin: Find my cursor
 Highlight/unhighlight cursor position by any criteria.
+For example, highlight cursor on jump to next search, or on jump to matching brace
 
 <!-- ![image](https://user-images.githubusercontent.com/3949614/158979422-eaf84035-9222-4bf6-8a10-e0c42a120e02.png) -->
 
