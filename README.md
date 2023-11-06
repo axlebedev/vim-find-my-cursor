@@ -2,7 +2,7 @@
 Highlight/unhighlight cursor position by any criteria.
 For example, highlight cursor on jump to next search, or on jump to matching brace
 
-<!-- ![image](https://user-images.githubusercontent.com/3949614/158979422-eaf84035-9222-4bf6-8a10-e0c42a120e02.png) -->
+https://user-images.githubusercontent.com/3949614/158979017-19f3cf61-6b3e-4a23-a3b1-2b4a413e9cb4.mp4
 
 This plugin adds a function: highlight cursor position  
 Highlight will be cleared after timeout, or "CursorMoved" event
@@ -50,11 +50,6 @@ nnoremap <silent> gd <CMD>call JumpDefinitionFindCursor()<CR>
 " Using with plugins 'junegunn/vim-slash' and 'henrik/vim-indexed-search'
 noremap <silent> <plug>(slash-after) <CMD>execute("FindCursor #d6d8fa 0<bar>ShowSearchIndex")<CR>
 ```
-
-
-### DEMO
-
-https://user-images.githubusercontent.com/3949614/158979017-19f3cf61-6b3e-4a23-a3b1-2b4a413e9cb4.mp4
 
 
 
