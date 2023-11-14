@@ -1,8 +1,9 @@
 # Vim plugin: Find my cursor
 Highlight/unhighlight cursor position by any criteria.
-For example, highlight cursor on jump to next search, or on jump to matching brace
 
-https://user-images.githubusercontent.com/3949614/158979017-19f3cf61-6b3e-4a23-a3b1-2b4a413e9cb4.mp4
+How to use it? Some usage examples:
+<video src='https://github.com/axlebedev/vim-find-my-cursor/assets/3949614/bca6deb8-6333-4c0f-bf06-caa59becf134' width=360/>
+
 
 This plugin adds a function: highlight cursor position  
 Highlight will be cleared after timeout, or "CursorMoved" event
