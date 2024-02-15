@@ -45,10 +45,10 @@ function! s:RestoreWindowLocalSettings() abort
     for bufn in tabpagebuflist()
         let winn = bufwinnr(bufn)
         let savedSettings = getwinvar(winn, 'savedSettings')
-        if (has_key(savedSettings, 'cursorline'))
+        if (exists('savedSettings.cursorline'))
             call setwinvar(winn, '&cursorline', savedSettings.cursorline)
         endif
-        if (has_key(savedSettings, 'cursorcolumn'))
+        if (exists('savedSettings.cursorcolumn'))
             call setwinvar(winn, '&cursorcolumn', savedSettings.cursorcolumn)
         endif
     endfor
